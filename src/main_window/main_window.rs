@@ -1,7 +1,11 @@
 use crate::main_window::{MainView, StatusBar, TitleBar};
-use gpui_kit::{AppContext, Context, Entity, InteractiveElement, IntoElement, ParentElement, Render, Styled, Window, component::v_flex, div};
+use gpui_kit::{
+    App, AppContext, Context, Entity, FocusHandle, Focusable, InteractiveElement, IntoElement,
+    ParentElement, Render, Styled, Window, component::v_flex, div,
+};
 
 pub struct MainWindow {
+    focus_handle: FocusHandle,
     title_bar: Entity<TitleBar>,
     content: Entity<MainView>,
     status_bar: Entity<StatusBar>,
@@ -10,10 +14,17 @@ pub struct MainWindow {
 impl MainWindow {
     pub fn new(window: &mut Window, cx: &mut Context<Self>) -> Self {
         Self {
+            focus_handle: cx.focus_handle(),
             title_bar: cx.new(|cx| TitleBar::new(window, cx)),
             content: cx.new(|cx| MainView::new(window, cx)),
             status_bar: cx.new(|_| StatusBar),
         }
+    }
+}
+
+impl Focusable for MainWindow {
+    fn focus_handle(&self, _: &App) -> FocusHandle {
+        self.focus_handle.clone()
     }
 }
 
@@ -22,6 +33,7 @@ impl Render for MainWindow {
         v_flex()
             .id("main-window")
             .size_full()
+            .track_focus(&self.focus_handle)
             .child(self.title_bar.clone())
             .child(div().flex_1().min_h_0().child(self.content.clone()))
             .child(self.status_bar.clone())

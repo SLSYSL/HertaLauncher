@@ -1,8 +1,9 @@
 use gpui_kit::{
-    Context, FocusHandle, Focusable, InteractiveElement, IntoElement, ParentElement, Render,
-    Styled, Window,
+    Context, FocusHandle, Focusable, FontWeight, InteractiveElement, IntoElement, MouseButton,
+    ParentElement, Render, Styled, Window,
+    assets::IconName,
     component::{
-        IconName, Sizable, TitleBar as KitTitleBar, WindowExt,
+        Sizable, TitleBar as KitTitleBar, WindowExt,
         button::{Button, ButtonVariants},
         h_flex,
     },
@@ -35,17 +36,21 @@ impl Render for TitleBar {
             .child(
                 div()
                     .text_sm()
-                    .font_weight(gpui_kit::FontWeight::MEDIUM)
+                    .font_weight(FontWeight::MEDIUM)
                     .child("HertaLauncher"),
             )
             .child(
                 h_flex()
+                    .px_2()
                     .gap_2()
                     .items_center()
-                    .track_focus(&self.focus_handle)
-                    .on_mouse_down(gpui_kit::MouseButton::Left, |_, _, cx| {
-                        cx.stop_propagation()
-                    })
+                    .on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation())
+                    .child(
+                        Button::new("extension")
+                            .small()
+                            .ghost()
+                            .icon(IconName::Blocks),
+                    )
                     .child(
                         Button::new("settings")
                             .small()

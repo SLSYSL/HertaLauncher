@@ -4,7 +4,11 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+config = "0.15.27"
+dirs = "7.0.0"
 gpui-kit = "0.7.0"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
 
 [profile.release]
 opt-level = "s"

@@ -1,4 +1,6 @@
-use gpui_kit::{Context, FocusHandle, Focusable, IntoElement, ParentElement, Render, Window, div};
+use gpui_kit::{
+    App, Context, FocusHandle, Focusable, IntoElement, ParentElement, Render, Window, div,
+};
 
 pub struct MainView {
     focus_handle: FocusHandle,
@@ -13,7 +15,7 @@ impl MainView {
 }
 
 impl Focusable for MainView {
-    fn focus_handle(&self, _: &gpui_kit::App) -> FocusHandle {
+    fn focus_handle(&self, _: &App) -> FocusHandle {
         self.focus_handle.clone()
     }
 }
