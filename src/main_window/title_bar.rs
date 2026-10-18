@@ -37,7 +37,7 @@ impl Render for TitleBar {
                 div()
                     .text_sm()
                     .font_weight(FontWeight::MEDIUM)
-                    .child("HertaLauncher"),
+                    .child("Herta Launcher"),
             )
             .child(
                 h_flex()
@@ -45,32 +45,32 @@ impl Render for TitleBar {
                     .gap_2()
                     .items_center()
                     .on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation())
-                    .child(
-                        Button::new("extension")
-                            .small()
-                            .ghost()
-                            .icon(IconName::Blocks),
-                    )
-                    .child(
+                    .child({
+                        let label = "设置";
                         Button::new("settings")
                             .small()
                             .ghost()
                             .icon(IconName::Settings)
+                            .tooltip(label)
+                            .accessibility_label(label)
                             .on_click(|_, window, cx| {
                                 window.open_dialog(cx, |dialog, window, cx| {
                                     settings_dialog(dialog, cx, window)
                                 });
-                            }),
-                    )
-                    .child(
+                            })
+                    })
+                    .child({
+                        let label = "HertaLauncher Github 仓库";
                         Button::new("Github")
                             .small()
                             .ghost()
                             .icon(IconName::Github)
+                            .tooltip(label)
+                            .accessibility_label(label)
                             .on_click(|_, _, cx| {
                                 cx.open_url("https://github.com/SLSYSL/HertaLauncher");
-                            }),
-                    ),
+                            })
+                    }),
             )
     }
 }

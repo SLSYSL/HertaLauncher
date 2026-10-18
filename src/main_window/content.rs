@@ -1,5 +1,5 @@
 use gpui_kit::{
-    App, Context, FocusHandle, Focusable, IntoElement, ParentElement, Render, Window, div,
+    App, Context, FocusHandle, Focusable, IntoElement, ParentElement, Render, Styled, Window, div,
 };
 
 pub struct MainView {
@@ -22,6 +22,6 @@ impl Focusable for MainView {
 
 impl Render for MainView {
     fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
-        div().child("Test")
+        div().size_full().p_4().child("游戏详情 / 启动按钮")
     }
 }

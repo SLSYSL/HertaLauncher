@@ -1,20 +1,22 @@
 mod config;
+mod games;
 mod main_window;
 
 use crate::main_window::MainWindow;
 use gpui_kit::{
     AppContext, application,
     assets::AllAssets,
-    component::{Theme, ThemeMode, TitleBar, init},
+    component::{Theme, ThemeMode, TitleBar},
     open_window,
 };
 
 fn main() {
     application().with_assets(AllAssets).run(move |cx| {
-        init(cx);
+        gpui_kit::init(cx);
+        crate::config::init(cx);
 
         // 应用持久化主题
-        if crate::config::with(|c| c.dark_mode) {
+        if crate::config::current(cx).dark_mode {
             Theme::change(ThemeMode::Dark, None, cx);
         }
 
