@@ -1,0 +1,71 @@
+import { Palette } from "std-widgets.slint";
+import {
+    KitThemes,
+    KitThemeContext,
+    KitSearchField,
+    KitIconButton,
+    KitGlyphs,
+    LayoutSpace,
+} from "@kit/kit.slint";
+import { Sidebar } from "sidebar.slint";
+import { Store } from "store.slint";
+
+export {
+    KitFormValidation,
+    HtmlInputKind,
+    NumberInputFormat,
+    KitInputConstraints,
+    KitValidationResult,
+    KitValidityState,
+} from "@kit/kit.slint";
+
+export component App inherits Window {
+    title: "Herta Launcher";
+    preferred-width: 1080px;
+    preferred-height: 720px;
+    max-width: 99999px;
+    max-height: 99999px;
+    background: Store.theme.canvas;
+    default-font-size: Store.theme.typography.size-body;
+    in-out property <bool> dark: Palette.color-scheme == ColorScheme.dark;
+
+    function sync-theme() {
+        KitThemeContext.current = root.dark ? KitThemes.dark : KitThemes.light;
+    }
+
+    init => { root.sync-theme() }
+    changed dark => { root.sync-theme() }
+
+    FlexboxLayout {
+        flex-direction: column;
+        cross-axis-alignment: center;
+        alignment: center;
+        spacing: 8px;
+
+        Text {
+            text: "欢迎使用 Herta Launcher";
+            font-size: Store.theme.typography.size-title;
+            font-weight: Store.theme.typography.weight-bold;
+        }
+
+        Text {
+            text: "鼠标靠近窗口左侧或 Ctrl+B 显示侧边栏";
+        }
+    }
+
+    Sidebar {
+        HorizontalLayout {
+            spacing: Store.theme.spacing.compact.padding-block;
+
+            KitSearchField {
+                placeholder: "按名称搜索游戏…";
+                accessible-name: "按名称搜索游戏";
+            }
+
+            KitIconButton {
+                glyph: KitGlyphs.plus();
+                accessible-name: "添加游戏";
+            }
+        }
+    }
+}

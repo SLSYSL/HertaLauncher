@@ -1,3 +1,0 @@
-[target.x86_64-pc-windows-msvc]
-# QuickJS VM + cranelift JIT 初始化吃栈；默认 1MB 主线程栈不够，提到 16MB
-rustflags = ["-C", "link-args=/STACK:16777216"]

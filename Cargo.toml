@@ -1,32 +1,25 @@
 [package]
-name = "herta_launcher"
+name = "herta-launcher"
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.92"
 
 [dependencies]
-dirs = "7.0.0"
-gpui-kit = { git = "https://github.com/longbridge/gpui-kit", rev = "9254c58028cebe8122b989c30e15f9139e0b2569" }
-gpui-shell = { git = "https://github.com/longbridge/gpui-kit", rev = "9254c58028cebe8122b989c30e15f9139e0b2569", default-features = false, features = [
-    "quickjs",
-    "components",
+anyhow = "1"
+slint = { version = "=1.18.1", default-features = false, features = [
+    "std",
+    "compat-1-18",
+    "accessibility",
+    "backend-winit",
+    "renderer-software"
 ] }
-serde = { version = "1.0.229", features = ["derive"] }
-serde_json = "1.0.151"
-zip = { version = "2", default-features = false, features = ["deflate"] }
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-# llrt_crypto（gpui-shell quickjs 传递依赖）要求 rsa 0.10.0-rc.18；rc.19 改了 API。
-# rsa rc.18 又要求 pkcs1 0.8.0-rc.4；rc.5 把 RsaPublicKey 改成了泛型。
-# 上游 llrt 升级后删除这两个钉子。
-rsa = "=0.10.0-rc.18"
-pkcs1 = "=0.8.0-rc.4"
+slint-kit = "=0.5.1"
 
-# gpui-shell 依赖的 LLRT 模块声明依赖 crates.io 的 rquickjs，
-# 但实际必须与 quickjs-jit 共享同一套类型/VM。上游工作区用 [patch] 解决，
-# 而 patch 不会随依赖传播，此处必须复刻（源自 tag v0.7.3 的 rquickjs-compat）。
-[patch.crates-io]
-rquickjs = { git = "https://github.com/longbridge/gpui-kit", tag = "v0.7.3" }
+[build-dependencies]
+slint-kit-build = "=0.5.1"
 
 [profile.release]
-lto = true
-strip = "symbols"
+opt-level = "z"
+lto = "fat"
 codegen-units = 1
+strip = "symbols"

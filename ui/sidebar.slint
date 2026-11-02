@@ -1,0 +1,72 @@
+import { KitCard, KitIconButton } from "@kit/kit.slint";
+import { LucideIcons } from "@kit/icons/lucide/all.slint";
+import { Store } from "store.slint";
+
+export component Sidebar {
+    width: 100%;
+    height: 100%;
+
+    in-out property <bool> sidebar-open: false;
+    in property <length> panel-width: 280px;
+    in property <length> gap: 10px;
+    property <length> hotzone-width: 10px;
+    property <bool> hover-armed: true;
+
+    init => { key-scope.focus(); }
+
+    function close() {
+        root.sidebar-open = false;
+        key-scope.focus();
+    }
+
+    hotzone := TouchArea {
+        x: 0;
+        y: 0;
+        width: sidebar-open ? parent.width : root.hotzone-width;
+        height: parent.height;
+        pointer-event(e) => {
+            if (self.mouse-x <= root.gap + root.panel-width) {
+                root.sidebar-open = true;
+                root.hover-armed = true;
+            } else if (e.kind == PointerEventKind.down || root.hover-armed) {
+                root.sidebar-open = false;
+                root.hover-armed = false;
+            }
+        }
+    }
+
+    sidebar := KitCard {
+        x: sidebar-open ? root.gap : -root.panel-width;
+        y: root.gap;
+        z: 10;
+        width: root.panel-width;
+        height: parent.height - 2 * root.gap;
+        clip: true;
+        accessible-role: complementary;
+        accessible-label: "Sidebar";
+        inset: compact;
+        gap: compact;
+        cache-rendering-hint: true;
+        animate x {
+            duration: 160ms;
+            easing: ease-out;
+        }
+
+        @children
+    }
+
+    key-scope := FocusScope {
+        key-pressed(e) => {
+            if (e.text == Key.Escape && root.sidebar-open) {
+                root.close();
+                accept
+            }
+            if (e.text == "b" && e.modifiers.control) {
+                root.sidebar-open = !root.sidebar-open;
+                root.hover-armed = false;
+                accept
+            }
+            reject
+        }
+    }
+}

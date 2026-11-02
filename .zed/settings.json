@@ -1,0 +1,11 @@
+{
+  "lsp": {
+    "slint": {
+      "binary": {
+        "arguments": [
+          "-L", "kit=target/vendor/slint-kit-slint/ui"
+        ],
+      }
+    }
+  }
+}
