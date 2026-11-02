@@ -16,11 +16,14 @@ pub struct MainWindow {
 
 impl MainWindow {
     pub fn new(window: &mut Window, cx: &mut Context<Self>) -> Self {
+        let content = cx.new(|cx| MainView::new(window, cx));
+        // 预加载当前游戏的 shell（浅栈异步任务）
+        content.update(cx, |view, cx| view.ensure_current_shell(cx));
         Self {
             focus_handle: cx.focus_handle(),
             title_bar: cx.new(|cx| TitleBar::new(window, cx)),
             sidebar: cx.new(|cx| GameSidebar::new(window, cx)),
-            content: cx.new(|cx| MainView::new(window, cx)),
+            content,
             status_bar: cx.new(|cx| StatusBar::new(cx)),
         }
     }

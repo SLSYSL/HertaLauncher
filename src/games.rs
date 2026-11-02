@@ -1,32 +1,41 @@
-use gpui_kit::assets::IconName;
+//! 已导入游戏的读取辅助（数据本体在 `config::AppConfig::games`）。
 
-pub struct Game {
-    pub id: &'static str,
-    pub name: &'static str,
-    pub icon: IconName,
+use gpui_kit::App;
+
+use crate::config::{self, GameEntry};
+
+/// 全部已导入游戏（快照）
+pub fn all(cx: &App) -> Vec<GameEntry> {
+    config::current(cx).games.clone()
 }
 
-pub const ALL: &[Game] = &[
-    Game {
-        id: "hsr",
-        name: "崩坏：星穹铁道",
-        icon: IconName::Star,
-    },
-    Game {
-        id: "zzz",
-        name: "绝区零",
-        icon: IconName::Blocks,
-    },
-    Game {
-        id: "gi",
-        name: "原神",
-        icon: IconName::Gamepad,
-    },
-];
+/// 当前选中：game_id 匹配项，否则第一个；未导入任何游戏时为 None
+pub fn resolve(cx: &App) -> Option<GameEntry> {
+    let cfg = config::current(cx);
+    cfg.games
+        .iter()
+        .find(|g| g.id == cfg.game_id)
+        .cloned()
+        .or_else(|| cfg.games.first().cloned())
+}
 
-/// config 里存的 id 可能过期（游戏被移除），这里统一回退到第一个
-pub fn resolve(id: &str) -> &'static Game {
-    ALL.iter()
-        .find(|g| g.id == id)
-        .unwrap_or_else(|| &ALL[0])
+/// 导入时生成稳定 id —— 同时是插件目录名（shell/<id>/），保证文件系统安全且可读
+pub fn new_id(name: &str) -> String {
+    let slug: String = name
+        .chars()
+        .map(|c| {
+            if c.is_ascii_alphanumeric() {
+                c.to_ascii_lowercase()
+            } else {
+                '_'
+            }
+        })
+        .collect();
+    let slug = slug.trim_matches('_');
+    let stem = if slug.is_empty() { "game" } else { slug };
+    let stamp = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_millis())
+        .unwrap_or(0);
+    format!("{stem}-{stamp}")
 }

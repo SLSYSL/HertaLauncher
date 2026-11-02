@@ -27,8 +27,17 @@ fn config_path() -> PathBuf {
 #[serde(default)] // 缺失字段用默认值
 pub struct AppConfig {
     pub dark_mode: bool,
-    pub game_id: String, // 当前选中的游戏 id，空 = games::ALL[0]
-    pub sidebar_collapsed: bool,
+    pub game_id: String,         // 当前选中的游戏 id
+    pub sidebar_collapsed: bool, // 侧栏是否整块收起
+    pub games: Vec<GameEntry>,   // 用户导入的游戏
+}
+
+/// 用户导入的游戏。id 同时是插件目录名：shell/<id>/main.js
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GameEntry {
+    pub id: String,
+    pub name: String,
+    pub exe: String, // 游戏 exe 路径（launch_game 用）
 }
 
 pub struct ConfigStore(Arc<AppConfig>);

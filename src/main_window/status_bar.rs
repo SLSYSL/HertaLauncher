@@ -23,7 +23,9 @@ impl StatusBar {
 impl Render for StatusBar {
     fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let cfg = config::current(cx);
-        let game_name = games::resolve(&cfg.game_id).name;
+        let game_name = games::resolve(cx)
+            .map(|g| g.name)
+            .unwrap_or_else(|| "未导入游戏".into());
 
         KitStatusBar::new()
             .left(
