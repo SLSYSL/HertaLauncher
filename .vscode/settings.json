@@ -1,0 +1,5 @@
+{
+  "slint.libraryPaths": {
+    "kit": "target/vendor/slint-kit-slint/ui"
+  }
+}

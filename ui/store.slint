@@ -1,5 +1,31 @@
-import { KitTheme, KitThemeContext } from "@kit/kit.slint";
+import { KitTheme, KitThemeContext, ContentItem } from "@kit/kit.slint";
 
 export global Store {
-    out property <KitTheme> theme: KitThemeContext.current;
+    in-out property <int> active-index: -1;
+    in-out property <KitTheme> theme: KitThemeContext.current;
+    in-out property <[ContentItem]> games: [
+        {
+            token: 0,
+            title: "崩坏：星穹铁道",
+            excerpt: "已安装 · v3.2.0",
+            metadata: "最后运行 2 小时前"
+        },
+        {
+            token: 1,
+            title: "原神",
+            excerpt: "已安装 · v6.1.0",
+            metadata: "最后运行 3 天前"
+        },
+        { token: 2, title: "绝区零", excerpt: "未安装", metadata: "—" },
+        {
+            token: 3,
+            title: "鸣潮",
+            excerpt: "已安装 · v3.0.1",
+            metadata: "最后运行 1 周前"
+        },
+        { token: 4, title: "绝区零", excerpt: "未安装", metadata: "—" },
+        { token: 5, title: "绝区零", excerpt: "未安装", metadata: "—" },
+        { token: 6, title: "绝区零", excerpt: "未安装", metadata: "—" },
+        { token: 7, title: "绝区零", excerpt: "未安装", metadata: "—" },
+    ];
 }

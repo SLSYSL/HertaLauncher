@@ -1,0 +1,50 @@
+# 许可门禁：cargo licenses（等价 cargo deny check licenses）
+# 装工具：cargo install cargo-deny --locked
+# 白名单外的一切许可都被拒绝。被拦下时先确认该许可与 GPL-3.0-or-later 兼容：
+# 兼容则加进 allow，不兼容则换掉该依赖。
+
+[licenses]
+version = 2
+confidence-threshold = 0.9
+unused-allowed-license = "allow"
+allow = [
+    # 宽松许可
+    "MIT",
+    "MIT-0",
+    "0BSD",
+    "ISC",
+    "Unlicense",
+    "CC0-1.0",
+    "Zlib",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "BSL-1.0",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "Unicode-3.0",
+    # 本项目自身
+    "GPL-3.0-or-later",
+    # Slint 声明 `GPL-3.0-only OR LicenseRef-Slint-Royalty-free-2.0
+    # OR LicenseRef-Slint-Software-3.0`，本项目只取 GPL-3.0-only 分支；
+    # 那两个商业授权与 GPL 分发互斥，故意不列。
+    "GPL-3.0-only",
+]
+private = { ignore = true }
+
+[advisories]
+version = 2
+yanked = "warn"
+ignore = []
+# 拉不到 RustSec 库时，本地副本在 14 天内可降级为警告继续检查
+maximum-db-staleness = "P14D"
+# unmaintained 只报本工作区：Slint 树里的 ttf-parser / zbus_names / zvariant* 本项目修不了
+unmaintained = "workspace"
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

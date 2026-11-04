@@ -3,6 +3,10 @@ name = "herta-launcher"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.92"
+license = "GPL-3.0-or-later"
+
+[features]
+dev-tools = ["slint/mcp", "slint/live-preview"]
 
 [dependencies]
 anyhow = "1"
@@ -13,10 +17,11 @@ slint = { version = "=1.18.1", default-features = false, features = [
     "backend-winit",
     "renderer-software"
 ] }
-slint-kit = "=0.5.1"
+slint-kit = "=0.6.0"
 
 [build-dependencies]
-slint-kit-build = "=0.5.1"
+slint-build = "=1.18.1"
+slint-kit-build = "=0.6.0"
 
 [profile.release]
 opt-level = "z"

@@ -6,6 +6,8 @@ import {
     KitIconButton,
     KitGlyphs,
     LayoutSpace,
+    KitContentList,
+    ContentItem,
 } from "@kit/kit.slint";
 import { Sidebar } from "sidebar.slint";
 import { Store } from "store.slint";
@@ -20,6 +22,7 @@ export {
 } from "@kit/kit.slint";
 
 export component App inherits Window {
+    in-out property <bool> dark: Palette.color-scheme == ColorScheme.dark;
     title: "Herta Launcher";
     preferred-width: 1080px;
     preferred-height: 720px;
@@ -27,7 +30,6 @@ export component App inherits Window {
     max-height: 99999px;
     background: Store.theme.canvas;
     default-font-size: Store.theme.typography.size-body;
-    in-out property <bool> dark: Palette.color-scheme == ColorScheme.dark;
 
     function sync-theme() {
         KitThemeContext.current = root.dark ? KitThemes.dark : KitThemes.light;
@@ -53,19 +55,5 @@ export component App inherits Window {
         }
     }
 
-    Sidebar {
-        HorizontalLayout {
-            spacing: Store.theme.spacing.compact.padding-block;
-
-            KitSearchField {
-                placeholder: "按名称搜索游戏…";
-                accessible-name: "按名称搜索游戏";
-            }
-
-            KitIconButton {
-                glyph: KitGlyphs.plus();
-                accessible-name: "添加游戏";
-            }
-        }
-    }
+    Sidebar { }
 }
